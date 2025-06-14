@@ -50,7 +50,7 @@ public class HostEventsBinder {
             return;
 
         subscriptions = [
-            events.Subscribe<WorldSavedEvent>(_ => worldManager.Sync()),
+            events.Subscribe<WorldSyncNeededEvent>(_ => worldManager.Sync()),
             events.Subscribe<DebugSnapshotAvailableEvent>(e => server.Send(new SyncWorldDebugSnapshot(e.Snapshot)))
         ];
     }

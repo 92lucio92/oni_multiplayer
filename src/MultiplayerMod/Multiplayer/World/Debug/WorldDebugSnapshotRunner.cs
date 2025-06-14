@@ -2,6 +2,7 @@ using System;
 using MultiplayerMod.Core.Dependency;
 using MultiplayerMod.Core.Events;
 using MultiplayerMod.Core.Unity;
+using MultiplayerMod.Multiplayer.CoreOperations.Events;
 using UnityEngine;
 
 namespace MultiplayerMod.Multiplayer.World.Debug;
@@ -11,6 +12,7 @@ public class WorldDebugSnapshotRunner : MultiplayerKMonoBehaviour, IRenderEveryT
     private WorldDebugSnapshot? current;
 
     private const float checkPeriod = 30.0f;
+    private const int SyncErrorThreshold = 500;
     private float lastTime;
     public static WorldDebugSnapshot? LastServerInfo { private get; set; }
 
@@ -37,6 +39,8 @@ public class WorldDebugSnapshotRunner : MultiplayerKMonoBehaviour, IRenderEveryT
             return;
 
         ErrorsCount = current != null ? WorldDebugSnapshotComparator.Compare(current, LastServerInfo, true) : 0;
+        if (ErrorsCount >= SyncErrorThreshold)
+            eventDispatcher.Dispatch(new WorldSyncNeededEvent());
         LastServerInfo = null;
     }
 
