@@ -40,7 +40,7 @@ open source contributions:
      - Click `Manage Nuget`
      - Click the `gear` at the right top
      - Add name: `nuget.org`, url: `https://api.nuget.org/v3/index.json`
-7. Start the game trough steam
+7. Start the game through steam
 8. If you did `step 5`, then go to mods and make sure you got the `DEV` version `enabled` and the `subscribed` one `disabled`
 9. Edit your code, and repeat `step 6`, `step 7` and test ingame
 
