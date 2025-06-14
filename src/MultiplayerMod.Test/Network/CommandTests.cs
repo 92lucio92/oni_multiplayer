@@ -64,4 +64,36 @@ public class CommandTests {
         Assert.NotNull(message);
     }
 
+    [Test]
+    public void TestExactFragmentBoundary() {
+        var factory = new NetworkMessageFactory();
+        var processor = new NetworkMessageProcessor();
+
+        var command = new DataCommand { Data = Array.Empty<byte>() };
+        using var emptySerialized = NetworkSerializer.Serialize(
+            new NetworkMessage(command, MultiplayerCommandOptions.None)
+        );
+
+        var baseSize = (int) emptySerialized.Size;
+        var totalSize = Configuration.MaxFragmentDataSize * 2;
+        var dataLength = totalSize - baseSize;
+        Assert.GreaterOrEqual(dataLength, 0);
+
+        command.Data = new byte[dataLength];
+
+        using var serialized = NetworkSerializer.Serialize(
+            new NetworkMessage(command, MultiplayerCommandOptions.None)
+        );
+        Assert.AreEqual(totalSize, serialized.Size);
+
+        var fragments = factory.Create(command, MultiplayerCommandOptions.None).ToList();
+        var message = fragments
+            .Select(fragment => processor.Process(0, fragment))
+            .FirstOrDefault(it => it != null);
+
+        Assert.AreEqual(1 + totalSize / Configuration.MaxFragmentDataSize, fragments.Count);
+        Assert.NotNull(message);
+        Assert.AreEqual(command.Data.Length, ((DataCommand) message.Command).Data.Length);
+    }
+
 }
