@@ -15,7 +15,7 @@ public class NetworkMessageFactory {
             yield break;
         }
 
-        var fragmentsCount = (int) message.Size / MaxFragmentDataSize + 1;
+        var fragmentsCount = (int) ((message.Size + MaxFragmentDataSize - 1) / MaxFragmentDataSize);
         var header = new NetworkMessageFragmentsHeader(fragmentsCount);
         var serializedHeader = NetworkSerializer.Serialize(header);
         yield return serializedHeader;
