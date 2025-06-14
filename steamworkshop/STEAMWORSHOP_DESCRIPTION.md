@@ -15,7 +15,7 @@ Stage: Alpha
 
 [h2] What's Not Implemented [/h2]
 [list]
- [*] Syncronisation of duplicants (planned for future updates).
+ [*] Synchronization of duplicants (planned for future updates).
  [*] Support for DLC content (planned for future updates).
  [*] Different game mods (e.g. living on different asteroids, controlling different dupes, etc).
 [/list]
